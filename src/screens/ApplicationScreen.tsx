@@ -123,7 +123,11 @@ const ApplicationScreen: React.FC = () => {
                   </TouchableOpacity>
                 </View>
 
-                <TouchableOpacity style={styles.optionButton}>
+                <TouchableOpacity style={styles.optionButton}
+                onPress={() => {
+                  setPopupVisible(false);
+                  navigation.navigate('Dashboard');
+                }}>
                   <Text style={styles.optionText}>Cloud</Text>
                 </TouchableOpacity>
 
