@@ -25,12 +25,14 @@ const ApplicationScreen: React.FC = () => {
   };
 
   const handleLogout = () => {
-    console.log('Log out clicked');
-    setMenuVisible(false);
-    setTimeout(() => {
-    navigation.navigate('Login');
+  console.log('Log out clicked');
+  setMenuVisible(false);
+  setTimeout(() => {
+    navigation.replace('Login');
   }, 300);
-  };
+};
+
+
 
   return (
     <View style={styles.container}>
@@ -149,7 +151,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f9fafa',
-    marginTop: 50,
+    marginTop: 20,
   },
   header: {
     flexDirection: 'row',

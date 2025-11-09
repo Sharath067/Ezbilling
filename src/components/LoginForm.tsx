@@ -8,6 +8,7 @@ const LoginForm: React.FC = () => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [errors, setErrors] = useState<{ username?: string; password?: string }>({});
+  const [activeField, setActiveField] = useState<'username' | 'password' | null>(null);
   const navigation = useNavigation<any>();
 
   useEffect(() => {
@@ -42,14 +43,19 @@ const LoginForm: React.FC = () => {
   };
 
   const handleScreenPress = () => {
-    Keyboard.dismiss();
+  Keyboard.dismiss();
+
+  if (activeField === 'username') {
     const usernameError = validateField('username', username);
+    setErrors((prev) => ({ ...prev, username: usernameError || undefined }));
+  } else if (activeField === 'password') {
     const passwordError = validateField('password', password);
-    setErrors({
-      username: usernameError || undefined,
-      password: passwordError || undefined,
-    });
-  };
+    setErrors((prev) => ({ ...prev, password: passwordError || undefined }));
+  }
+
+  setActiveField(null);
+};
+
 
   const handleLogin = () => {
     const usernameError = validateField('username', username);
@@ -69,9 +75,9 @@ const LoginForm: React.FC = () => {
     <TouchableWithoutFeedback onPress={handleScreenPress}>
       <View style={{ padding: 20 }}>
          <Image
-                    source={require('../../assets/smart-insight-logo.png')}
-                    style={styles.logo}
-                  />
+            source={require('../../assets/smart-insight-logo.png')}
+            style={styles.logo}
+          />
         <Text style={styles.label}>Username</Text>
         <TextInput
           placeholder="Enter Username"
@@ -82,10 +88,11 @@ const LoginForm: React.FC = () => {
           placeholderTextColor="#999"
           autoCapitalize="none"
           value={username}
+          onFocus={() => setActiveField('username')}
           onChangeText={handleUsernameChange}
         />
         {errors.username && <Text style={styles.errorText}>{errors.username}</Text>}
-
+        
         <View style={{ position: 'relative' }}>
           <Text style={styles.label}>Password</Text>
           <TextInput
@@ -98,8 +105,10 @@ const LoginForm: React.FC = () => {
             placeholderTextColor="#999"
             secureTextEntry={!showPassword}
             value={password}
+            onFocus={() => setActiveField('password')}
             onChangeText={handlePasswordChange}
           />
+
           <TouchableOpacity
             onPress={() => setShowPassword(!showPassword)}
             style={styles.eyeButton}

@@ -6,6 +6,17 @@ const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
  *
  * @type {import('@react-native/metro-config').MetroConfig}
  */
-const config = {};
+const defaultConfig = getDefaultConfig(__dirname);
 
-module.exports = mergeConfig(getDefaultConfig(__dirname), config);
+const customConfig = {
+  reporter: {
+    update(event) {
+      // Suppress "JavaScript logs have moved" and similar startup messages
+      if (event.type === 'initialize_started' || event.type === 'initialize_done') {
+        return;
+      }
+    },
+  },
+};
+
+module.exports = mergeConfig(defaultConfig, customConfig);
