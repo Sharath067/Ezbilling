@@ -1,44 +1,55 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React from 'react';
+import { StatusBar, StyleSheet } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import LoginScreen from './src/screens/LoginScreen';
+import ForgotPasswordScreen from './src/screens/ForgotPasswordScreen';
+import ApplicationScreen from './src/screens/ApplicationScreen';
+import DashboardScreen from './src/screens/DashboardScreen';
+import Colors from './src/constants/Colors';
+import ElectronicInvoicingScreen from './src/screens/menu/ElectronicInvoicingScreen';
+import MenuDashboard from './src/screens/menu/MenuDashboard';
+import InvalidationScreen from './src/screens/menu/InvalidationScreen';
+import CancelledScreen from './src/screens/menu/CancelledScreen';
+import ContingencyScreen from './src/screens/menu/ContingencyScreen';
+import EZReportsScreen from './src/screens/EZReportsScreen';
 
-import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
-import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+const Stack = createNativeStackNavigator();
 
-function App() {
-  const isDarkMode = useColorScheme() === 'dark';
-
+const App = () => {
   return (
     <SafeAreaProvider>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <AppContent />
+      <NavigationContainer>
+        <SafeAreaView style={styles.container}>
+          <StatusBar barStyle="light-content" backgroundColor={Colors.primary} />
+          <Stack.Navigator
+            screenOptions={{
+              headerShown: false,
+              contentStyle: { backgroundColor: Colors.primary },
+            }}
+          >
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+            <Stack.Screen name="Application" component={ApplicationScreen} />
+            <Stack.Screen name="Dashboard" component={DashboardScreen} />
+            <Stack.Screen name="Record" component={ElectronicInvoicingScreen} />
+            <Stack.Screen name="MenuDashboard" component={MenuDashboard} />
+            <Stack.Screen name="Invalidation" component={InvalidationScreen} />
+            <Stack.Screen name="Contingency" component={ContingencyScreen} />
+            <Stack.Screen name="Cancelled" component={CancelledScreen} />
+            <Stack.Screen name="EZReports" component={EZReportsScreen} />
+          </Stack.Navigator>
+        </SafeAreaView>
+      </NavigationContainer>
     </SafeAreaProvider>
   );
-}
-
-function AppContent() {
-  const safeAreaInsets = useSafeAreaInsets();
-
-  return (
-    <View style={styles.container}>
-      <NewAppScreen
-        templateFileName="App.tsx"
-        safeAreaInsets={safeAreaInsets}
-      />
-    </View>
-  );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: Colors.primary,
   },
 });
 
