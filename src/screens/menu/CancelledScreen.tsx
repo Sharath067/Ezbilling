@@ -49,7 +49,7 @@ const CancelledScreen = () => {
     },
     {
       id: '3',
-      status: 'Approved',
+      status: 'Rejected',
       documentType: 'Invoice',
       client: 'ABC Pvt Ltd',
       issuer: 'XYZ Ltd',
@@ -59,12 +59,25 @@ const CancelledScreen = () => {
     },
   ]);
 
+  const getStatusIcon = (status: string) => {
+    switch (status.trim().toLowerCase()) {
+      case 'approved':
+        return require('../../../assets/approved.png');
+      case 'pending':
+        return require('../../../assets/load.png');
+      case 'rejected':
+        return require('../../../assets/reject.png');
+      default:
+        return null;
+    }
+  };
+
   const columnWidths = {
-    state: 100,
+    state: 60,
     documentType: 130,
-    client: 150,
-    issuer: 150,
-    controlNumber: 130,
+    client: 120,
+    issuer: 110,
+    controlNumber: 140,
     issueDate: 120,
     document: 120,
   };
@@ -76,7 +89,11 @@ const CancelledScreen = () => {
         { backgroundColor: index % 2 === 0 ? '#f9fbff' : '#ffffff' },
       ]}
     >
-      <Text style={[styles.cell, { width: columnWidths.state }]}>{item.status}</Text>
+      <View style={[styles.statusCell, { width: columnWidths.state }]}>
+        {getStatusIcon(item.status) && (
+          <Image source={getStatusIcon(item.status)} style={styles.statusIcon} />
+        )}
+      </View>
       <Text style={[styles.cell, { width: columnWidths.documentType }]}>{item.documentType}</Text>
       <Text style={[styles.cell, { width: columnWidths.client }]}>{item.client}</Text>
       <Text style={[styles.cell, { width: columnWidths.issuer }]}>{item.issuer}</Text>
@@ -90,7 +107,6 @@ const CancelledScreen = () => {
 
   return (
     <View style={styles.container}>
-      {/* ✅ Floating Header with Shadow */}
       <View style={styles.topBar}>
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
           <Image
@@ -105,7 +121,6 @@ const CancelledScreen = () => {
         </View>
       </View>
 
-      {/* ✅ Main Content */}
       <View style={styles.content}>
         <View style={styles.header}>
           <View style={styles.leftHeader}>
@@ -130,26 +145,17 @@ const CancelledScreen = () => {
               placeholderTextColor="#999"
             />
           </View>
-
-          <TouchableOpacity style={styles.exportButton}>
-            <Image
-              source={require('../../../assets/download.png')}
-              style={styles.exportIcon}
-            />
-            <Text style={styles.exportText}>Export</Text>
-          </TouchableOpacity>
         </View>
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View>
             <View style={styles.tableHeader}>
-              <Text style={[styles.headerCell, { width: columnWidths.state }]}>ACTIONS</Text>
-              <Text style={[styles.headerCell, { width: columnWidths.documentType }]}>CONTROL NUMBER</Text>
-              <Text style={[styles.headerCell, { width: columnWidths.client }]}>DOCUMENT TYPE</Text>
-              <Text style={[styles.headerCell, { width: columnWidths.issuer }]}>TRANSMITTER</Text>
-              <Text style={[styles.headerCell, { width: columnWidths.controlNumber }]}>CUSTOMER</Text>
-              <Text style={[styles.headerCell, { width: columnWidths.issueDate }]}>STATE</Text>
-              <Text style={[styles.headerCell, { width: columnWidths.document }]}>ISSUE DATE</Text>
+              <Text style={[styles.headerCell, { width: columnWidths.state }]}>STATE</Text>
+              <Text style={[styles.headerCell, { width: columnWidths.documentType }]}>DOCUMENT TYPE</Text>
+              <Text style={[styles.headerCell, { width: columnWidths.client }]}>CLIENT</Text>
+              <Text style={[styles.headerCell, { width: columnWidths.issuer }]}>ISSUER</Text>
+              <Text style={[styles.headerCell, { width: columnWidths.controlNumber }]}>CONTROL NUMBER</Text>
+              <Text style={[styles.headerCell, { width: columnWidths.issueDate }]}>ISSUE DATE</Text>
               <Text style={[styles.headerCell, { width: columnWidths.document }]}>DOCUMENT</Text>
             </View>
 
@@ -246,13 +252,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingHorizontal: 10,
     height: 40,
-    flex: 0.7,
+    width: '100%',
     elevation: 1,
   },
   searchIcon: {
     width: 18,
     height: 18,
-    marginRight: 8,
+    marginRight: 10,
+    marginLeft: 5,
     tintColor: '#666',
   },
   searchInput: {
@@ -260,9 +267,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#333',
   },
-  exportButton: { flexDirection: 'row', alignItems: 'center' },
-  exportIcon: { width: 18, height: 18, marginRight: 5 },
-  exportText: { fontSize: 14, fontWeight: '600', color: '#003366' },
 
   tableHeader: {
     flexDirection: 'row',
@@ -272,21 +276,38 @@ const styles = StyleSheet.create({
     borderColor: '#d0d7de',
   },
   headerCell: {
-    textAlign: 'center',
+    textAlign: 'left',
     fontWeight: '700',
     color: '#003366',
     fontSize: 13,
+    paddingLeft: 10,
   },
   tableRow: {
     flexDirection: 'row',
     borderBottomWidth: 1,
     borderColor: '#ccd6e0',
     paddingVertical: 12,
+    alignItems: 'center',
+  },
+  statusCell: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: 10,
+  },
+  statusIcon: {
+    width: 22,
+    height: 22,
+    marginRight: 8,
+  },
+  statusText: {
+    fontSize: 13,
+    color: '#333',
   },
   cell: {
-    textAlign: 'center',
+    textAlign: 'left',
     color: '#333',
     fontSize: 13,
+    paddingLeft: 10,
   },
   highlightText: {
     color: '#003366',

@@ -25,14 +25,12 @@ const ApplicationScreen: React.FC = () => {
   };
 
   const handleLogout = () => {
-  console.log('Log out clicked');
-  setMenuVisible(false);
-  setTimeout(() => {
-    navigation.replace('Login');
-  }, 300);
-};
-
-
+    console.log('Log out clicked');
+    setMenuVisible(false);
+    setTimeout(() => {
+      navigation.navigate('Login');
+    }, 200);
+  };
 
   return (
     <View style={styles.container}>
@@ -40,7 +38,11 @@ const ApplicationScreen: React.FC = () => {
         <Text style={styles.title}>Applications</Text>
 
         <View style={styles.userSection}>
-          <Image source={require('../../assets/world.png')} style={styles.flag} />
+          <Image
+            source={require('../../assets/world.png')}
+            style={styles.flag}
+          />
+
           <TouchableOpacity onPress={() => setMenuVisible(!menuVisible)}>
             <View style={styles.userBadge}>
               <Image
@@ -54,27 +56,34 @@ const ApplicationScreen: React.FC = () => {
       </View>
 
       {menuVisible && (
-        <View style={styles.overlay}>
-          <View style={styles.dropdownMenu}>
-            <TouchableOpacity style={styles.menuItem} onPress={handleStart}>
-              <Image
-                source={require('../../assets/home.png')}
-                style={styles.menuIcon}
-              />
-              <Text style={styles.menuText}>Start</Text>
-            </TouchableOpacity>
+        <TouchableWithoutFeedback onPress={() => setMenuVisible(false)}>
+          <View style={styles.fullScreenTouchable}>
+            <View style={styles.dropdownMenuWrapper}>
+              <View style={styles.dropdownMenu}>
+                <TouchableOpacity style={styles.menuItem} onPress={handleStart}>
+                  <Image
+                    source={require('../../assets/home.png')}
+                    style={styles.menuIcon}
+                  />
+                  <Text style={styles.menuText}>Start</Text>
+                </TouchableOpacity>
 
-            <View style={styles.divider} />
+                <View style={styles.divider} />
 
-            <TouchableOpacity style={styles.menuItem} onPress={handleLogout}>
-              <Image
-                source={require('../../assets/turn-off.png')}
-                style={styles.menuIcon}
-              />
-              <Text style={styles.menuText}>Log out</Text>
-            </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.menuItem}
+                  onPress={handleLogout}
+                >
+                  <Image
+                    source={require('../../assets/turn-off.png')}
+                    style={styles.menuIcon}
+                  />
+                  <Text style={styles.menuText}>Log out</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
-        </View>
+        </TouchableWithoutFeedback>
       )}
 
       <ScrollView
@@ -104,6 +113,7 @@ const ApplicationScreen: React.FC = () => {
       </ScrollView>
 
       <Text style={styles.footer}>© Smart Insight Solutions 2025</Text>
+
       <Modal
         visible={popupVisible}
         transparent
@@ -115,7 +125,9 @@ const ApplicationScreen: React.FC = () => {
             <TouchableWithoutFeedback>
               <View style={styles.popupBox}>
                 <View style={styles.popupHeader}>
-                  <Text style={styles.popupTitle}>Select the below options</Text>
+                  <Text style={styles.popupTitle}>
+                    Select the below options
+                  </Text>
                   <TouchableOpacity onPress={() => setPopupVisible(false)}>
                     <Image
                       source={require('../../assets/circle-with-x.png')}
@@ -125,11 +137,13 @@ const ApplicationScreen: React.FC = () => {
                   </TouchableOpacity>
                 </View>
 
-                <TouchableOpacity style={styles.optionButton}
-                onPress={() => {
-                  setPopupVisible(false);
-                  navigation.navigate('Dashboard');
-                }}>
+                <TouchableOpacity
+                  style={styles.optionButton}
+                  onPress={() => {
+                    setPopupVisible(false);
+                    navigation.navigate('Dashboard');
+                  }}
+                >
                   <Text style={styles.optionText}>Cloud</Text>
                 </TouchableOpacity>
 
@@ -144,8 +158,6 @@ const ApplicationScreen: React.FC = () => {
     </View>
   );
 };
-
-export default ApplicationScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -199,22 +211,34 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: '#000',
   },
-  overlay: {
+
+  fullScreenTouchable: {
     position: 'absolute',
-    top: 50,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 999,
+  },
+
+  dropdownMenuWrapper: {
+    position: 'absolute',
+    top: 45,
     right: 10,
   },
+
   dropdownMenu: {
     backgroundColor: '#fff',
     borderRadius: 10,
     elevation: 8,
+    width: 130,
+    paddingVertical: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 5,
-    width: 130,
-    paddingVertical: 10,
   },
+
   menuItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -236,6 +260,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#eee',
     marginVertical: 5,
   },
+
   main: {
     flexGrow: 1,
     justifyContent: 'center',
@@ -321,3 +346,5 @@ const styles = StyleSheet.create({
     height: 26,
   },
 });
+
+export default ApplicationScreen;

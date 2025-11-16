@@ -1,5 +1,5 @@
 import React from 'react';
-import { StatusBar } from 'react-native';
+import { StatusBar, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
@@ -21,7 +21,7 @@ const App = () => {
   return (
     <SafeAreaProvider>
       <NavigationContainer>
-        <SafeAreaView style={{ flex: 1, backgroundColor: Colors.primary }}>
+        <SafeAreaView style={styles.container}>
           <StatusBar barStyle="light-content" backgroundColor={Colors.primary} />
           <Stack.Navigator
             screenOptions={{
@@ -45,5 +45,12 @@ const App = () => {
     </SafeAreaProvider>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.primary,
+  },
+});
 
 export default App;

@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   picker: {
-    height: 50,
+    height: 52,
     color: '#333',
   },
   card: {

@@ -49,7 +49,7 @@ const DocumentScreen = () => {
     },
     {
       id: '3',
-      status: 'Approved',
+      status: 'Rejected',
       documentType: 'Invoice',
       client: 'ABC Pvt Ltd',
       issuer: 'XYZ Ltd',
@@ -60,23 +60,42 @@ const DocumentScreen = () => {
   ]);
 
   const columnWidths = {
-    state: 100,
+    state: 60,
     documentType: 130,
-    client: 150,
+    client: 120,
     issuer: 150,
-    controlNumber: 130,
+    controlNumber: 140,
     issueDate: 120,
     document: 120,
   };
 
+  const getStatusIcon = (status: string) => {
+    switch (status.toLowerCase()) {
+      case 'approved':
+        return require('../../../assets/approved.png');
+      case 'pending':
+        return require('../../../assets/load.png');
+      case 'rejected':
+        return require('../../../assets/reject.png');
+      default:
+        return null;
+    }
+  };
+
   const renderItem = ({ item, index }: { item: DocumentItem; index: number }) => (
-    <View
-      style={[
-        styles.tableRow,
-        { backgroundColor: index % 2 === 0 ? '#f9fbff' : '#ffffff' },
-      ]}
-    >
-      <Text style={[styles.cell, { width: columnWidths.state }]}>{item.status}</Text>
+    <View style={[styles.tableRow, index % 2 === 0 ? styles.rowEven : styles.rowOdd]}>
+      
+      <View style={[styles.statusChangeCells, { width: columnWidths.state }]}>
+        <Image
+          source={getStatusIcon(item.status)}
+          style={[
+            styles.statusIcon,
+            item.status.toLowerCase() === 'pending' && styles.statusPendingIcon,
+          ]}
+          resizeMode="contain"
+        />
+      </View>
+
       <Text style={[styles.cell, { width: columnWidths.documentType }]}>{item.documentType}</Text>
       <Text style={[styles.cell, { width: columnWidths.client }]}>{item.client}</Text>
       <Text style={[styles.cell, { width: columnWidths.issuer }]}>{item.issuer}</Text>
@@ -128,14 +147,6 @@ const DocumentScreen = () => {
               placeholderTextColor="#999"
             />
           </View>
-
-          <TouchableOpacity style={styles.exportButton}>
-            <Image
-              source={require('../../../assets/download.png')}
-              style={styles.exportIcon}
-            />
-            <Text style={styles.exportText}>Export</Text>
-          </TouchableOpacity>
         </View>
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -164,48 +175,46 @@ const DocumentScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  container: { 
+    flex: 1, 
     backgroundColor: '#fff',
-    marginTop: 20,
-  },
-
+     marginTop: 20 
+    },
   topBar: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#ffffff',
     paddingVertical: Platform.OS === 'ios' ? 55 : 20,
     paddingHorizontal: 20,
-    borderBottomWidth: 0,
     shadowColor: '#000',
     shadowOpacity: 0.15,
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 6,
     elevation: 6,
   },
-  backButton: {
-    position: 'absolute',
-    left: 20,
-    zIndex: 2,
+  backButton: { 
+    position: 'absolute', 
+    left: 20, 
+    zIndex: 2 
   },
-  backIcon: {
-    width: 25,
-    height: 25,
-    tintColor: '#003366',
+  backIcon: { 
+    width: 25, 
+    height: 25, 
+    tintColor: '#003366' 
   },
-  titleContainer: {
-    flex: 1,
-    marginLeft: 40,
+  titleContainer: { 
+    flex: 1, 
+    marginLeft: 40 
   },
-  screenTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#003366',
+  screenTitle: { 
+    fontSize: 20, 
+    fontWeight: '700', 
+    color: '#003366' 
   },
 
-  content: {
-    flex: 1,
-    padding: 20,
+  content: { 
+    flex: 1, 
+    padding: 20 
   },
 
   header: {
@@ -214,26 +223,34 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 15,
   },
-  leftHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  leftHeader: { 
+    flexDirection: 'row', 
+    alignItems: 'center' 
   },
-  icon: { width: 18, height: 18, marginRight: 6 },
-  headerText: { fontSize: 16, fontWeight: '600', color: '#333' },
+  icon: { 
+    width: 18, 
+    height: 18, 
+    marginRight: 6
+   },
+  headerText: { 
+    fontSize: 16, 
+    fontWeight: '600', 
+    color: '#333' 
+  },
   updateButton: {
     backgroundColor: '#003366',
     paddingHorizontal: 15,
     paddingVertical: 8,
     borderRadius: 6,
   },
-  updateButtonText: { color: '#fff', fontWeight: '600' },
+  updateButtonText: {
+     color: '#fff', 
+     fontWeight: '600' 
+    },
 
-  searchRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 15,
-  },
+  searchRow: { 
+    marginBottom: 15
+   },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -243,23 +260,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingHorizontal: 10,
     height: 40,
-    flex: 0.7,
+    width: '100%',
     elevation: 1,
   },
-  searchIcon: {
-    width: 18,
-    height: 18,
-    marginRight: 8,
-    tintColor: '#666',
+  searchIcon: { 
+    width: 18, 
+    height: 18, 
+    marginRight: 10, 
+    marginLeft: 5, 
+    tintColor: '#666' 
   },
-  searchInput: {
-    flex: 1,
-    fontSize: 14,
-    color: '#333',
+  searchInput: { 
+    flex: 1, 
+    fontSize: 14, 
+    color: '#333' 
   },
-  exportButton: { flexDirection: 'row', alignItems: 'center' },
-  exportIcon: { width: 18, height: 18, marginRight: 5 },
-  exportText: { fontSize: 14, fontWeight: '600', color: '#003366' },
 
   tableHeader: {
     flexDirection: 'row',
@@ -269,31 +284,55 @@ const styles = StyleSheet.create({
     borderColor: '#d0d7de',
   },
   headerCell: {
-    textAlign: 'center',
+    textAlign: 'left',
     fontWeight: '700',
     color: '#003366',
     fontSize: 13,
+    paddingLeft: 7,
   },
-  tableRow: {
+
+  tableRow: { 
     flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderColor: '#ccd6e0',
-    paddingVertical: 12,
+     borderBottomWidth: 1, 
+     borderColor: '#ccd6e0', 
+     paddingVertical: 12 
+    },
+  rowEven: { 
+    backgroundColor: '#f9fbff'
+   },
+  rowOdd: { 
+    backgroundColor: '#ffffff' 
   },
-  cell: {
-    textAlign: 'center',
-    color: '#333',
-    fontSize: 13,
+
+  cell: { 
+    textAlign: 'left', 
+    color: '#333', 
+    fontSize: 13, 
+    paddingLeft: 7 
   },
-  highlightText: {
-    color: '#003366',
-    fontWeight: '600',
+  highlightText: { 
+    color: '#003366', 
+    fontWeight: '600' 
   },
-  noData: {
-    textAlign: 'center',
-    marginTop: 20,
-    color: '#999',
-    fontSize: 14,
+  noData: { 
+    textAlign: 'center', 
+    marginTop: 20, 
+    color: '#999', 
+    fontSize: 14 
+  },
+
+  statusChangeCells: { 
+    justifyContent: 'center',
+     alignItems: 'center' 
+    },
+
+  statusIcon: { 
+    width: 25, 
+    height: 25 
+  },
+  statusPendingIcon: { 
+    width: 20, 
+    height: 20 
   },
 });
 

@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, TouchableOpacity, Text, Image, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import {
+  View,
+  TextInput,
+  TouchableOpacity,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 import GlobalStyles from '../styles/GlobalStyles';
 import { useNavigation } from '@react-navigation/native';
 
@@ -43,19 +52,18 @@ const LoginForm: React.FC = () => {
   };
 
   const handleScreenPress = () => {
-  Keyboard.dismiss();
+    Keyboard.dismiss();
 
-  if (activeField === 'username') {
-    const usernameError = validateField('username', username);
-    setErrors((prev) => ({ ...prev, username: usernameError || undefined }));
-  } else if (activeField === 'password') {
-    const passwordError = validateField('password', password);
-    setErrors((prev) => ({ ...prev, password: passwordError || undefined }));
-  }
+    if (activeField === 'username') {
+      const usernameError = validateField('username', username);
+      setErrors((prev) => ({ ...prev, username: usernameError || undefined }));
+    } else if (activeField === 'password') {
+      const passwordError = validateField('password', password);
+      setErrors((prev) => ({ ...prev, password: passwordError || undefined }));
+    }
 
-  setActiveField(null);
-};
-
+    setActiveField(null);
+  };
 
   const handleLogin = () => {
     const usernameError = validateField('username', username);
@@ -66,24 +74,26 @@ const LoginForm: React.FC = () => {
     });
 
     if (!usernameError && !passwordError) {
-      console.log(' Login successful with:', username, password);
+      console.log('Login successful with:', username, password);
       navigation.navigate('Application');
     }
   };
 
   return (
     <TouchableWithoutFeedback onPress={handleScreenPress}>
-      <View style={{ padding: 20 }}>
-         <Image
-            source={require('../../assets/smart-insight-logo.png')}
-            style={styles.logo}
-          />
+      <View style={styles.container}>
+        <Image
+          source={require('../../assets/smart-insight-logo.png')}
+          style={styles.logo}
+        />
+
         <Text style={styles.label}>Username</Text>
+
         <TextInput
           placeholder="Enter Username"
           style={[
             GlobalStyles.input,
-            errors.username ? { borderColor: 'red' } : {},
+            errors.username && styles.errorBorder,
           ]}
           placeholderTextColor="#999"
           autoCapitalize="none"
@@ -92,15 +102,16 @@ const LoginForm: React.FC = () => {
           onChangeText={handleUsernameChange}
         />
         {errors.username && <Text style={styles.errorText}>{errors.username}</Text>}
-        
-        <View style={{ position: 'relative' }}>
+
+        <View style={styles.passwordWrapper}>
           <Text style={styles.label}>Password</Text>
+
           <TextInput
             placeholder="Enter Password"
             style={[
               GlobalStyles.input,
-              { paddingRight: 40 },
-              errors.password ? { borderColor: 'red' } : {},
+              styles.passwordInput,
+              errors.password && styles.errorBorder,
             ]}
             placeholderTextColor="#999"
             secureTextEntry={!showPassword}
@@ -124,6 +135,7 @@ const LoginForm: React.FC = () => {
             />
           </TouchableOpacity>
         </View>
+
         {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
 
         <TouchableOpacity style={GlobalStyles.button} onPress={handleLogin}>
@@ -139,15 +151,18 @@ const LoginForm: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  eyeButton: {
-    position: 'absolute',
-    right: 10,
-    top: 43,
+  container: {
+    padding: 20,
   },
-  eyeIcon: {
-    width: 25,
-    height: 25,
+
+  logo: {
+    width: 150,
+    height: 70,
+    resizeMode: 'contain',
+    marginBottom: 30,
+    alignSelf: 'center',
   },
+
   label: {
     fontSize: 16,
     fontWeight: '400',
@@ -156,19 +171,35 @@ const styles = StyleSheet.create({
     marginTop: 5,
     alignSelf: 'flex-start',
   },
+
+  passwordWrapper: {
+    position: 'relative',
+  },
+
+  passwordInput: {
+    paddingRight: 40,
+  },
+
+  eyeButton: {
+    position: 'absolute',
+    right: 10,
+    top: 43,
+  },
+
+  eyeIcon: {
+    width: 25,
+    height: 25,
+  },
+
+  errorBorder: {
+    borderColor: 'red',
+  },
+
   errorText: {
     color: 'red',
     fontSize: 13,
     marginTop: -8,
     marginBottom: 5,
-  },
-  logo: {
-    width: 150,
-    height: 70,
-    resizeMode: 'contain',
-    marginBottom: 30,
-    alignSelf: 'center',
-
   },
 });
 

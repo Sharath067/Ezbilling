@@ -8,11 +8,8 @@ const DailyBillingChart: React.FC = () => {
   const data = {
     labels: [
       "2025-10-18",
-    //   "2025-10-19",
       "2025-10-20",
-    //   "2025-10-21",
       "2025-10-22",
-    //   "2025-10-23",
       "2025-10-24",
     ],
     datasets: [
@@ -25,16 +22,13 @@ const DailyBillingChart: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      {/* Header Section */}
       <View style={styles.headerRow}>
         <Text style={styles.headerTitle}>Daily billing</Text>
         <TouchableOpacity style={styles.weekButton}>
           <Text style={styles.weekText}>Last week</Text>
-          {/* <Ionicons name="chevron-down" size={16} color="#607D8B" /> */}
         </TouchableOpacity>
       </View>
 
-      {/* Legend */}
       <View style={styles.legendContainer}>
         <View style={styles.legendItem}>
           <View style={[styles.legendCircle, { borderColor: "#0D47A1" }]} />
@@ -54,7 +48,6 @@ const DailyBillingChart: React.FC = () => {
         </View>
       </View>
 
-      {/* Bar Chart */}
       <BarChart
         data={data}
         width={screenWidth - 40}
@@ -81,12 +74,6 @@ const DailyBillingChart: React.FC = () => {
         style={styles.chart}
       />
 
-      {/* <View style={styles.scrollRangeContainer}>
-        <View style={styles.scrollRangeBar}>
-          <View style={styles.scrollHandleLeft} />
-          <View style={styles.scrollHandleRight} />
-        </View>
-      </View> */}
     </View>
   );
 };

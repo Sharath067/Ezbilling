@@ -23,7 +23,7 @@ type DocumentItem = {
   document: string;
 };
 
-const InvalidationScreen = () => {
+const DocumentScreen = () => {
   const navigation = useNavigation();
 
   const [data] = useState<DocumentItem[]>([
@@ -49,7 +49,7 @@ const InvalidationScreen = () => {
     },
     {
       id: '3',
-      status: 'Approved',
+      status: 'Rejected',
       documentType: 'Invoice',
       client: 'ABC Pvt Ltd',
       issuer: 'XYZ Ltd',
@@ -60,13 +60,26 @@ const InvalidationScreen = () => {
   ]);
 
   const columnWidths = {
-    state: 100,
+    state: 60,
     documentType: 130,
-    client: 150,
+    client: 120,
     issuer: 150,
-    controlNumber: 130,
+    controlNumber: 140,
     issueDate: 120,
     document: 120,
+  };
+
+  const getStatusIcon = (status: string) => {
+    switch (status.toLowerCase()) {
+      case 'approved':
+        return require('../../../assets/approved.png');
+      case 'pending':
+        return require('../../../assets/load.png');
+      case 'rejected':
+        return require('../../../assets/reject.png');
+      default:
+        return null;
+    }
   };
 
   const renderItem = ({ item, index }: { item: DocumentItem; index: number }) => (
@@ -76,7 +89,17 @@ const InvalidationScreen = () => {
         { backgroundColor: index % 2 === 0 ? '#f9fbff' : '#ffffff' },
       ]}
     >
-      <Text style={[styles.cell, { width: columnWidths.state }]}>{item.status}</Text>
+      <View style={[styles.statusCell, { width: columnWidths.state }]}>
+        <Image
+          source={getStatusIcon(item.status)}
+          style={[
+            styles.statusIcon,
+            item.status.toLowerCase() === 'pending' && { width: 20, height: 20 },
+          ]}
+          resizeMode="contain"
+        />
+      </View>
+
       <Text style={[styles.cell, { width: columnWidths.documentType }]}>{item.documentType}</Text>
       <Text style={[styles.cell, { width: columnWidths.client }]}>{item.client}</Text>
       <Text style={[styles.cell, { width: columnWidths.issuer }]}>{item.issuer}</Text>
@@ -90,7 +113,6 @@ const InvalidationScreen = () => {
 
   return (
     <View style={styles.container}>
-      {/* ✅ Shadow Header */}
       <View style={styles.topBar}>
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
           <Image
@@ -99,63 +121,59 @@ const InvalidationScreen = () => {
             resizeMode="contain"
           />
         </TouchableOpacity>
-        <Text style={styles.screenTitle}>Electronic Invoicing Invalidation</Text>
-      </View>
 
-      <View style={styles.header}>
-        <View style={styles.leftHeader}>
-          <Image source={require('../../../assets/filter.png')} style={styles.icon} />
-          <Text style={styles.headerText}>Filters (0)</Text>
+        <View style={styles.titleContainer}>
+          <Text style={styles.screenTitle}>Electronic Invoicing</Text>
         </View>
-        <TouchableOpacity style={styles.updateButton}>
-          <Text style={styles.updateButtonText}>Update</Text>
-        </TouchableOpacity>
       </View>
 
-      <View style={styles.searchRow}>
-        <View style={styles.searchContainer}>
-          <Image
-            source={require('../../../assets/search.png')}
-            style={styles.searchIcon}
-            resizeMode="contain"
-          />
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search..."
-            placeholderTextColor="#999"
-          />
-        </View>
-
-        <TouchableOpacity style={styles.exportButton}>
-          <Image
-            source={require('../../../assets/download.png')}
-            style={styles.exportIcon}
-          />
-          <Text style={styles.exportText}>Export</Text>
-        </TouchableOpacity>
-      </View>
-
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <View>
-          <View style={styles.tableHeader}>
-            <Text style={[styles.headerCell, { width: columnWidths.state }]}>ACTIONS</Text>
-            <Text style={[styles.headerCell, { width: columnWidths.documentType }]}>CONTROL NUMBER</Text>
-            <Text style={[styles.headerCell, { width: columnWidths.client }]}>DOCUMENT TYPE</Text>
-            <Text style={[styles.headerCell, { width: columnWidths.issuer }]}>TRANSMITTER</Text>
-            <Text style={[styles.headerCell, { width: columnWidths.controlNumber }]}>CUSTOMER</Text>
-            <Text style={[styles.headerCell, { width: columnWidths.issueDate }]}>STATE</Text>
-            <Text style={[styles.headerCell, { width: columnWidths.document }]}>ISSUE DATE</Text>
-            <Text style={[styles.headerCell, { width: columnWidths.document }]}>DOCUMENT</Text>
+      <View style={styles.content}>
+        <View style={styles.header}>
+          <View style={styles.leftHeader}>
+            <Image source={require('../../../assets/filter.png')} style={styles.icon} />
+            <Text style={styles.headerText}>Filters (0)</Text>
           </View>
-
-          <FlatList
-            data={data}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-            ListEmptyComponent={<Text style={styles.noData}>No records found</Text>}
-          />
+          <TouchableOpacity style={styles.updateButton}>
+            <Text style={styles.updateButtonText}>Update</Text>
+          </TouchableOpacity>
         </View>
-      </ScrollView>
+
+        <View style={styles.searchRow}>
+          <View style={styles.searchContainer}>
+            <Image
+              source={require('../../../assets/search.png')}
+              style={styles.searchIcon}
+              resizeMode="contain"
+            />
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search..."
+              placeholderTextColor="#999"
+            />
+          </View>
+        </View>
+
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <View>
+            <View style={styles.tableHeader}>
+              <Text style={[styles.headerCell, { width: columnWidths.state }]}>STATE</Text>
+              <Text style={[styles.headerCell, { width: columnWidths.documentType }]}>DOCUMENT TYPE</Text>
+              <Text style={[styles.headerCell, { width: columnWidths.client }]}>CUSTOMER</Text>
+              <Text style={[styles.headerCell, { width: columnWidths.issuer }]}>TRANSMITTER</Text>
+              <Text style={[styles.headerCell, { width: columnWidths.controlNumber }]}>CONTROL NUMBER</Text>
+              <Text style={[styles.headerCell, { width: columnWidths.issueDate }]}>ISSUE DATE</Text>
+              <Text style={[styles.headerCell, { width: columnWidths.document }]}>DOCUMENT</Text>
+            </View>
+
+            <FlatList
+              data={data}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id}
+              ListEmptyComponent={<Text style={styles.noData}>No records found</Text>}
+            />
+          </View>
+        </ScrollView>
+      </View>
     </View>
   );
 };
@@ -173,27 +191,36 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     paddingVertical: Platform.OS === 'ios' ? 55 : 20,
     paddingHorizontal: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e5e5e5',
-    elevation: 3,
+    borderBottomWidth: 0,
     shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
+    shadowOpacity: 0.15,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 6,
+    elevation: 6,
   },
   backButton: {
-    marginRight: 10,
+    position: 'absolute',
+    left: 20,
+    zIndex: 2,
   },
   backIcon: {
-    width: 24,
-    height: 24,
-    tintColor: '#000',
+    width: 25,
+    height: 25,
+    tintColor: '#003366',
+  },
+  titleContainer: {
+    flex: 1,
+    marginLeft: 40,
   },
   screenTitle: {
     fontSize: 20,
-    fontWeight: '600',
-    color: '#000',
-    marginLeft: 5,
+    fontWeight: '700',
+    color: '#003366',
+  },
+
+  content: {
+    flex: 1,
+    padding: 20,
   },
 
   header: {
@@ -201,8 +228,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 15,
-    marginHorizontal: 20,
-    marginTop: 15,
   },
   leftHeader: {
     flexDirection: 'row',
@@ -223,7 +248,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 15,
-    marginHorizontal: 20,
   },
   searchContainer: {
     flexDirection: 'row',
@@ -234,13 +258,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingHorizontal: 10,
     height: 40,
-    flex: 0.7,
+    width: '100%',
     elevation: 1,
   },
   searchIcon: {
     width: 18,
     height: 18,
-    marginRight: 8,
+    marginRight: 10,
+    marginLeft: 5,
     tintColor: '#666',
   },
   searchInput: {
@@ -248,9 +273,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#333',
   },
-  exportButton: { flexDirection: 'row', alignItems: 'center' },
-  exportIcon: { width: 18, height: 18, marginRight: 5 },
-  exportText: { fontSize: 14, fontWeight: '600', color: '#003366' },
 
   tableHeader: {
     flexDirection: 'row',
@@ -258,26 +280,25 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderBottomWidth: 1,
     borderColor: '#d0d7de',
-    marginHorizontal: 20,
   },
   headerCell: {
-    textAlign: 'center',
+    textAlign: 'left',
     fontWeight: '700',
     color: '#003366',
     fontSize: 13,
-    
+    paddingLeft: 7,
   },
   tableRow: {
     flexDirection: 'row',
     borderBottomWidth: 1,
     borderColor: '#ccd6e0',
     paddingVertical: 12,
-    marginHorizontal: 20,
   },
   cell: {
-    textAlign: 'center',
+    textAlign: 'left',
     color: '#333',
     fontSize: 13,
+    paddingLeft: 7,
   },
   highlightText: {
     color: '#003366',
@@ -289,6 +310,15 @@ const styles = StyleSheet.create({
     color: '#999',
     fontSize: 14,
   },
+  statusCell: {
+    alignItems: 'flex-start', 
+    justifyContent: 'center',
+    paddingLeft: 7,
+  },
+  statusIcon: {
+    width: 25,
+    height: 25,
+  },
 });
 
-export default InvalidationScreen;
+export default DocumentScreen;

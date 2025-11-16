@@ -38,7 +38,7 @@ const DashboardScreen: React.FC = () => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [billingLiteOpen, setBillingLiteOpen] = useState(false);
 
-  const dropdownOptions = ['Today', 'This week', 'This month'];
+  const dropdownOptions = ['Today', 'Week', 'Month'];
   const drawerAnim = React.useRef(new Animated.Value(-width)).current;
 
   const handleStart = () => {
@@ -51,7 +51,7 @@ const DashboardScreen: React.FC = () => {
     setMenuVisible(false);
     setTimeout(() => {
       navigation.navigate('Login');
-    }, 300);
+    }, 200);
   };
 
   const toggleDrawer = () => {
@@ -213,28 +213,35 @@ const DashboardScreen: React.FC = () => {
         </View>
       </View>
       {menuVisible && (
-        <View style={styles.overlay}>
-          <View style={styles.dropdownMenu}>
-            <TouchableOpacity style={styles.menuItem} onPress={handleStart}>
-              <Image
-                source={require('../../assets/home.png')}
-                style={styles.menuIcon}
-              />
-              <Text style={styles.menuText}>Start</Text>
-            </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={1}
+          style={styles.fullScreenTouchable}
+          onPress={() => setMenuVisible(false)}
+        >
+          <View style={styles.overlay}>
+            <View style={styles.dropdownMenu}>
+              <TouchableOpacity style={styles.menuItem} onPress={handleStart}>
+                <Image
+                  source={require('../../assets/home.png')}
+                  style={styles.menuIcon}
+                />
+                <Text style={styles.menuText}>Start</Text>
+              </TouchableOpacity>
 
-            <View style={styles.divider} />
+              <View style={styles.divider} />
 
-            <TouchableOpacity style={styles.menuItem} onPress={handleLogout}>
-              <Image
-                source={require('../../assets/turn-off.png')}
-                style={styles.menuIcon}
-              />
-              <Text style={styles.menuText}>Log out</Text>
-            </TouchableOpacity>
+              <TouchableOpacity style={styles.menuItem} onPress={handleLogout}>
+                <Image
+                  source={require('../../assets/turn-off.png')}
+                  style={styles.menuIcon}
+                />
+                <Text style={styles.menuText}>Log out</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
+        </TouchableOpacity>
       )}
+
 
       <ScrollView
         contentContainerStyle={styles.container}
@@ -258,22 +265,31 @@ const DashboardScreen: React.FC = () => {
               </TouchableOpacity>
 
               {dropdownVisible && (
-                <View style={styles.dropdownList}>
-                  {dropdownOptions.map(option => (
-                    <TouchableOpacity
-                      key={option}
-                      style={styles.dropdownItem}
-                      onPress={() => {
-                        setSelectedOption(option);
-                        setDropdownVisible(false);
-                      }}
-                    >
-                      <Text style={styles.dropdownItemText}>{option}</Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
+                <>
+                  <TouchableOpacity
+                    style={styles.dropdownOverlay}
+                    activeOpacity={1}
+                    onPress={() => setDropdownVisible(false)}
+                  />
+
+                  <View style={styles.dropdownList}>
+                    {dropdownOptions.map(option => (
+                      <TouchableOpacity
+                        key={option}
+                        style={styles.dropdownItem}
+                        onPress={() => {
+                          setSelectedOption(option);
+                          setDropdownVisible(false);
+                        }}
+                      >
+                        <Text style={styles.dropdownItemText}>{option}</Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                </>
               )}
             </View>
+
           </View>
 
           <View style={styles.overviewGrid}>
@@ -386,6 +402,23 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
     marginTop: 20,
+  },
+  dropdownOverlay: {
+  position: 'absolute',
+  top: -1000,
+  left: -1000,
+  right: -1000,
+  bottom: -1000,
+  zIndex: 1,
+},
+
+  fullScreenTouchable: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 49,
   },
   drawerOverlay: {
     position: 'absolute',

@@ -22,9 +22,6 @@ const ForgotPassword: React.FC = () => {
     } else if (value.trim().length < 4) {
       return 'Minimum 4 characters required';
     } 
-    // else if (value.includes('@') && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-    //   return 'Enter a valid email address';
-    // }
     return '';
   };
 

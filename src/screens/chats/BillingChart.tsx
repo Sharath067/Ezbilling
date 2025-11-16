@@ -1,58 +1,60 @@
-import React from "react";
-import { View, Text, Dimensions, StyleSheet } from "react-native";
-import { LineChart } from "react-native-chart-kit";
+import React from 'react';
+import { View, Text, Dimensions, StyleSheet } from 'react-native';
+import { LineChart } from 'react-native-chart-kit';
 
-const screenWidth = Dimensions.get("window").width;
+const screenWidth = Dimensions.get('window').width;
 
 const BillingChart: React.FC = () => {
   return (
     <View style={styles.container}>
-      {/* Chart Title */}
-      <Text style={styles.chartTitle}>Billing by day of the week (Last 6 months)</Text>
+      <Text style={styles.chartTitle}>
+        Billing by day of the week (Last 6 months)
+      </Text>
 
-      {/* Custom Legend */}
       <View style={styles.legendContainer}>
         <View style={styles.legendItem}>
-          <View style={[styles.dot, { backgroundColor: "#0D47A1" }]} />
+          <View style={[styles.dot, styles.dotBlue]} />
           <Text style={styles.legendText}>DTE</Text>
         </View>
+
         <View style={styles.legendItem}>
-          <View style={[styles.dot, { backgroundColor: "#BDBDBD" }]} />
+          <View style={[styles.dot, styles.dotGrey]} />
           <Text style={styles.legendText}>Ingresados</Text>
         </View>
+
         <View style={styles.legendItem}>
-          <View style={[styles.dot, { backgroundColor: "#388E3C" }]} />
+          <View style={[styles.dot, styles.dotGreen]} />
           <Text style={styles.legendText}>Procesados</Text>
         </View>
+
         <View style={styles.legendItem}>
-          <View style={[styles.dot, { backgroundColor: "#E57373" }]} />
+          <View style={[styles.dot, styles.dotRed]} />
           <Text style={styles.legendText}>Rechazados</Text>
         </View>
       </View>
 
-      {/* Line Chart */}
       <LineChart
         data={{
-          labels: ["Lunes", "Miercoles", "Viernes", "Domingo"],
+          labels: ['Lunes', 'Miercoles', 'Viernes', 'Domingo'],
           datasets: [
             {
               data: [0, 0, 0, 0],
-              color: () => "#0D47A1",
+              color: () => '#0D47A1',
               strokeWidth: 2,
             },
             {
               data: [0, 0, 0, 0],
-              color: () => "#BDBDBD",
+              color: () => '#BDBDBD',
               strokeWidth: 2,
             },
             {
               data: [0, 0, 0, 0],
-              color: () => "#388E3C",
+              color: () => '#388E3C',
               strokeWidth: 2,
             },
             {
               data: [0, 0, 0, 0],
-              color: () => "#E57373",
+              color: () => '#E57373',
               strokeWidth: 2,
             },
           ],
@@ -68,20 +70,20 @@ const BillingChart: React.FC = () => {
         withOuterLines={false}
         yLabelsOffset={6}
         chartConfig={{
-          backgroundColor: "#ffffff",
-          backgroundGradientFrom: "#ffffff",
-          backgroundGradientTo: "#ffffff",
+          backgroundColor: '#ffffff',
+          backgroundGradientFrom: '#ffffff',
+          backgroundGradientTo: '#ffffff',
           decimalPlaces: 1,
           color: (opacity = 1) => `rgba(229, 115, 115, ${opacity})`,
-          labelColor: () => "#9E9E9E",
+          labelColor: () => '#9E9E9E',
           propsForDots: {
-            r: "4",
-            strokeWidth: "1",
-            stroke: "#E57373",
+            r: '4',
+            strokeWidth: '1',
+            stroke: '#E57373',
           },
           propsForBackgroundLines: {
-            stroke: "#E0E0E0",
-            strokeDasharray: "",
+            stroke: '#E0E0E0',
+            strokeDasharray: '',
           },
         }}
         bezier
@@ -93,10 +95,10 @@ const BillingChart: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 12,
     padding: 12,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 3,
@@ -104,30 +106,45 @@ const styles = StyleSheet.create({
   },
   chartTitle: {
     fontSize: 16,
-    fontWeight: "600",
-    color: "#263238",
+    fontWeight: '600',
+    color: '#263238',
     marginBottom: 10,
   },
   legendContainer: {
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
     marginBottom: 8,
   },
   legendItem: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginRight: 18,
   },
+
   dot: {
     width: 10,
     height: 10,
     borderRadius: 5,
     marginRight: 5,
   },
+
+  dotBlue: {
+    backgroundColor: '#0D47A1',
+  },
+  dotGrey: {
+    backgroundColor: '#BDBDBD',
+  },
+  dotGreen: {
+    backgroundColor: '#388E3C',
+  },
+  dotRed: {
+    backgroundColor: '#E57373',
+  },
+
   legendText: {
     fontSize: 13,
-    color: "#424242",
+    color: '#424242',
   },
   chart: {
     marginLeft: -12,

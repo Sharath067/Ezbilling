@@ -7,13 +7,6 @@ const LoginScreen: React.FC = () => {
   return (
     <View style={GlobalStyles.container}>
       <View style={GlobalStyles.card}>
-        {/* <View style={GlobalStyles.logoSection}>
-          <Image
-            source={require('../../assets/logo.png')}
-            style={GlobalStyles.logo}
-          />
-        </View> */}
-
         <View style={GlobalStyles.formSection}>
           <LoginForm />
         </View>
